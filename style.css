@@ -4,11 +4,18 @@
   --light-blue: #969cb3;
   --dark-green: #2D4A22;
   --light-green: #49aa26;
+  --lighter-green: #3dd705;
+  --red: #e92929;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  font-size: 93.75%; /* 15px */
 }
 
 body {
@@ -16,6 +23,20 @@ body {
   
   background-color: #E5E5E5;
 }
+
+ /* trick que esconde um item da página à nossa visibilidade, mas não impede um screenreader (acessibilidade) de ler o que está escondido */
+ .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+ /* fim do trick */
 
 .container {
   width: min(90vw, 800px);
@@ -31,7 +52,6 @@ h2 {
   font-weight: normal;
 }
 
-
 /* === HEADER === */
 
 header {
@@ -40,14 +60,14 @@ header {
   text-align: center;
 }
 
-#logo {
-  font-weight: 100;
-  color: #fff;
+/* === BALANCE === */
+
+#balance {
+  margin-top: -4rem;
 }
 
-/* === BALANCE === */
 #balance h2 {
-  margin-top: -8rem;
+  margin-top: -4rem;
   color: #fff;
 }
 
@@ -64,6 +84,11 @@ header {
 .card h3 {
   font-weight: normal;
   font-size: 1rem;
+
+  display: flex;
+  /* alinha os itens no eixo horizontal/X */
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card p {
@@ -78,7 +103,69 @@ header {
   color: #fff;
 }
 
+/* === LINKS & BUTTONS === */
+
+a {
+  text-decoration: none;
+  color: var(--light-green);
+}
+
+a:hover {
+  transition-duration: 300ms;
+  color: var(--lighter-green);
+}
+
+button {
+  width: 100%;
+  height: 50px;
+
+  border: none;
+  color: #fff;
+  background: var(--light-green);
+
+  padding: 0;
+
+  border-radius: .25rem;
+  cursor: pointer;
+}
+
+button:hover {
+  transition-duration: 300ms;
+  background: var(--lighter-green);
+}
+
+.button.new {
+  display: inline-block;
+  margin-bottom: .8rem;
+}
+
+.button.cancel {
+  color: var(--red);
+  border: 2px var(--red) solid;
+  border-radius: .25rem;
+
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: .6;
+}
+
+.button.cancel:hover {
+  transition-duration: 300ms;
+  opacity: 1;
+}
+
+
 /* === TABLE === */
+#transaction {
+  display: block;
+  /* overflow no eixo x faz com que a rolagem desse bloco não atrapalhe o layout. ou seja, esse bloco rola para os eixos X, mas sem sair da "caixa" em que está */
+  overflow-x: auto;
+}
+
 #data-table {
   width: 100%;
   border-spacing: 0 0.5rem;
@@ -89,6 +176,11 @@ header {
 table thead tr th:first-child,
 table tbody tr td:first-child {
   border-radius: 0.25rem 0 0 0.25rem;
+}
+
+table thead tr th:last-child,
+table tbody tr td:last-child {
+  border-radius: 0 0.25rem 0.25rem 0;
 }
 
 table th {
@@ -123,8 +215,82 @@ td.income {
 }
 
 td.expanse {
-  color: #e92929;
+  color: var(--red);
 }
+
+/* === MODAL === */
+.modal-overlay {
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, .7);
+
+  position: fixed;
+  top: 0;
+
+  display: flex;
+  align-items: center; /* eixo x*/
+  justify-content: center; /* eixo y */
+
+  opacity: 0;
+  visibility: hidden;
+
+  /* trick para evitar que outros elementos sobreponham o modal */
+  /* quando maior o z-index, mais "relevante" o elemento fica, deixando-o sempre a frente de outros elementos */
+  z-index: 999;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background-color: #f8f2f5;
+  padding: 2.4rem;
+
+  /* trick para evitar que outros elementos sobreponham o modal */
+  position: relative;
+  z-index: 1;
+}
+
+/* === FORM === */
+#form {
+  max-width: 500px;
+}
+
+#form h2 {
+  margin-top: 0;
+}
+
+input {
+  border: none;
+  border-radius: .2rem;
+
+  padding: .8rem;
+
+  width: 100%;
+}
+
+.input-group {
+  margin-top: .8rem;
+}
+
+.input-group small {
+  opacity: .4;
+}
+
+.input-group.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-group.actions .button,
+.input-group.actions button {
+  width: 48%;
+}
+
 
 /* === FOOTER === */
 footer {
@@ -133,5 +299,19 @@ footer {
   color: var(--dark-blue);
 
   opacity: 0.6;
+}
+
+/* === RESPONSIVE === */
+/* quando o width for X para cima, use essas regras. Caso contrário, continua usando todo o código anterior */
+@media (min-width: 800px) {
+  html {
+    font-size: 87.5%; /* 14px */
+  }
+
+  #balance {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 1fr 1fr 1fr */
+    gap: 2rem;
+  }
 }
 
