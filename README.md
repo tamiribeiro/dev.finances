@@ -1,1 +1,1 @@
-# dev.finance
+# dev.finance$
